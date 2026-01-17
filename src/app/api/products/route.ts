@@ -9,7 +9,7 @@ export async function POST(_req: Request) {
     }
 
     try {
-        const json = await req.json();
+        const json = await _req.json();
         const product = await prisma.product.create({
             data: {
                 ...json,
