@@ -2,7 +2,7 @@ import { auth } from '@/auth';
 import { prisma } from '@/lib/db';
 import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
+export async function POST(_req: Request) {
     const session = await auth();
     if (!session?.user?.id) {
         return new NextResponse('Unauthorized', { status: 401 });
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     }
 }
 
-export async function GET(req: Request) {
+export async function GET(_req: Request) {
     const session = await auth();
     if (!session?.user?.id) {
         return new NextResponse('Unauthorized', { status: 401 });

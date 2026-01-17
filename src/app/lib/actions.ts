@@ -1,7 +1,6 @@
 'use server'
 
 import { signIn, signOut } from '@/auth'
-import { AuthError } from 'next-auth'
 import { prisma } from '@/lib/db'
 import { auth } from '@/auth'
 import { revalidatePath } from 'next/cache'
@@ -36,15 +35,8 @@ export async function authenticate(
     try {
         await signIn('credentials', formData)
     } catch (error) {
-        if (error instanceof AuthError) {
-            switch (error.type) {
-                case 'CredentialsSignin':
-                    return 'Invalid credentials.'
-                default:
-                    return 'Something went wrong.'
-            }
-        }
-        throw error
+        console.error('Auth error:', error);
+        return 'Something went wrong.';
     }
 }
 
@@ -149,7 +141,12 @@ export async function updateUser(id: string, prevState: ActionState, formData: F
     try {
         const validatedData = UserSchema.parse(rawData);
 
-        const dataToUpdate: any = {
+        const dataToUpdate: {
+            name: string;
+            email: string;
+            password?: string;
+            sellerCode?: string | null;
+        } = {
             name: validatedData.name,
             email: validatedData.email,
             sellerCode: validatedData.sellerCode || null,
@@ -189,6 +186,7 @@ export async function deleteUser(id: string): Promise<ActionState> {
         revalidatePath('/users');
         return { success: true, message: 'User deleted successfully' };
     } catch (error) {
+        console.error('Delete user error:', error);
         return { success: false, message: 'Failed to delete user' };
     }
 }

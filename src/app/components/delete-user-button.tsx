@@ -15,7 +15,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 
 export default function DeleteUserButton({ id, userName }: { id: string, userName: string }) {
     const [isPending, startTransition] = useTransition();
@@ -46,7 +45,7 @@ export default function DeleteUserButton({ id, userName }: { id: string, userNam
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This will permanently delete the user <span className="font-semibold text-black">"{userName}"</span> and remove their data from our servers.
+                        This will permanently delete the user <span className="font-semibold text-black">&quot;{userName}&quot;</span> and remove their data from our servers.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

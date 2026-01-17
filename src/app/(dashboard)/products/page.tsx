@@ -1,7 +1,8 @@
 import { auth } from '@/auth';
 import { prisma } from '@/lib/db';
 import Link from 'next/link';
-import { Plus, Router } from 'lucide-react';
+import Image from 'next/image';
+import { Plus } from 'lucide-react';
 
 export default async function ProductsPage() {
     const session = await auth();
@@ -54,7 +55,13 @@ export default async function ProductsPage() {
                                         <div className="flex items-center space-x-4">
                                             <div className="h-10 w-10 rounded-md bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
                                                 {product.imageUrl ? (
-                                                    <img src={product.imageUrl} alt="" className="h-full w-full object-cover" />
+                                                    <Image
+                                                        src={product.imageUrl}
+                                                        alt={product.name}
+                                                        width={40}
+                                                        height={40}
+                                                        className="h-full w-full object-cover"
+                                                    />
                                                 ) : (
                                                     <div className="text-xs text-gray-400">img</div>
                                                 )}

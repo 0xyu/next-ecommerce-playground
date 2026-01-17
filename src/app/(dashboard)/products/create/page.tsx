@@ -1,6 +1,6 @@
 'use client';
 
-import { ActionState, createProduct } from '@/app/lib/actions';
+import { createProduct } from '@/app/lib/actions';
 import Link from 'next/link';
 import { useFormStatus } from 'react-dom';
 import { useActionState, useEffect } from 'react';

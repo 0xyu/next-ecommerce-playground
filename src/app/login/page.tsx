@@ -3,7 +3,6 @@
 import { useFormStatus } from 'react-dom';
 import { authenticate } from '@/app/lib/actions';
 import { useState } from 'react';
-import Link from 'next/link';
 import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
