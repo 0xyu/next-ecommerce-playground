@@ -1,33 +1,27 @@
 'use client';
 
-import { useState } from 'react';
-import { createProduct } from '@/app/lib/actions';
+import { ActionState, createProduct } from '@/app/lib/actions';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useFormStatus } from 'react-dom';
+import { useActionState, useEffect } from 'react';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 
 export default function CreateProductPage() {
-    const [isLoading, setIsLoading] = useState(false);
-    const router = useRouter();
+    const [state, formAction] = useActionState(createProduct, null);
 
-    async function handleSubmit(formData: FormData) {
-        setIsLoading(true);
-        try {
-            await createProduct(formData);
-            // Action handles redirect, but just in case
-        } catch (error) {
-            console.error(error);
-            alert('Something went wrong');
-        } finally {
-            setIsLoading(false);
+    useEffect(() => {
+        if (state?.success === false && state.message) {
+            toast.error(state.message);
         }
-    }
+    }, [state]);
 
     return (
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-100">
                 <h1 className="text-2xl font-bold mb-6">Create New Product</h1>
 
-                <form action={handleSubmit} className="space-y-6">
+                <form action={formAction} className="space-y-6">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
                         <input type="text" name="name" required className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none" />
@@ -55,27 +49,26 @@ export default function CreateProductPage() {
                         <input type="url" name="imageUrl" placeholder="https://example.com/image.jpg" className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none" />
                     </div>
 
-                    {/* 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Start Image Upload (Simulated)</label>
-            <input type="file" name="imageFile" className="block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-black file:text-white
-              hover:file:bg-gray-800
-            "/>
-          </div>
-          */}
-
                     <div className="flex justify-end space-x-3 pt-4">
                         <Link href="/products" className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition">Cancel</Link>
-                        <button type="submit" disabled={isLoading} className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition disabled:opacity-50">
-                            {isLoading ? 'Creating...' : 'Create Product'}
-                        </button>
+                        <SubmitButton />
                     </div>
                 </form>
             </div>
         </div>
+    );
+}
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+
+    return (
+        <Button
+            type="submit"
+            disabled={pending}
+            className="bg-black text-white hover:bg-gray-800"
+        >
+            {pending ? 'Creating...' : 'Create Product'}
+        </Button>
     );
 }

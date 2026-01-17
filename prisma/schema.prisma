@@ -12,6 +12,8 @@ model User {
   email         String    @unique
   password      String?
   image         String?
+  role          String    @default("USER")
+  sellerCode    String?   @unique
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   products      Product[]
