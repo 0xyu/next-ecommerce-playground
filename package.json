@@ -6,8 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "clean-build": "if exist .next (rmdir /s /q .next) && npm run build",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.2.0",

@@ -23,7 +23,7 @@ export async function POST(_req: Request) {
     }
 }
 
-export async function GET(_req: Request) {
+export async function GET() {
     const session = await auth();
     if (!session?.user?.id) {
         return new NextResponse('Unauthorized', { status: 401 });

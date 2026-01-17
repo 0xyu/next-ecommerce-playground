@@ -25,7 +25,7 @@ function createPrismaClient() {
   } else {
     console.log("Using SQLite adapter");
     const filename = dbUrl.replace("file:", "");
-    const sqlite = new Database(filename);
+    new Database(filename);
     adapter = new PrismaBetterSqlite3({
       url: dbUrl
     });
