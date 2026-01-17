@@ -15,7 +15,7 @@ async function debugProducts() {
 
     console.log('User found:', user.email, 'ID:', user.id);
     console.log('Total Products:', user.products.length);
-    user.products.forEach(p => {
+    user.products.forEach((p: any) => {
         console.log(`- Product: ${p.name}, Published: ${p.published}`);
     });
 }

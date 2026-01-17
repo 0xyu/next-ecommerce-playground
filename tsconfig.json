@@ -30,5 +30,12 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "debug-products.ts",
+    "check-role.ts",
+    "final-check.ts",
+    "publish-teng-product.ts",
+    "update-seller.ts"
+  ]
 }
