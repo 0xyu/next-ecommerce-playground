@@ -6,11 +6,14 @@ import { useFormStatus } from 'react-dom';
 import { useActionState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { User as PrismaUser } from '@prisma/client';
+interface UserProp {
+    id: string;
+    name?: string | null;
+    email: string;
+    sellerCode?: string | null;
+}
 
-export type UserWithSellerCode = PrismaUser & { sellerCode?: string | null };
-
-export default function EditUserForm({ user }: { user: UserWithSellerCode }) {
+export default function EditUserForm({ user }: { user: UserProp }) {
     const updateUserWithId = updateUser.bind(null, user.id);
     const [state, formAction] = useActionState(updateUserWithId, null);
 
