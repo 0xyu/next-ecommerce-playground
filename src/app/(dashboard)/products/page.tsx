@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Plus } from 'lucide-react';
+import type { Product } from '../../../../prisma/generated/client';
 
 export default async function ProductsPage() {
     const session = await auth();
@@ -49,7 +50,7 @@ export default async function ProductsPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
-                            {products.map((product) => (
+                            {products.map((product: Product) => (
                                 <tr key={product.id} className="hover:bg-gray-50 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center space-x-4">

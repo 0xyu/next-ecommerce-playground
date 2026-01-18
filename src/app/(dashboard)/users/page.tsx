@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import Link from 'next/link';
 import { Plus, Edit } from 'lucide-react';
 import DeleteUserButton from '@/app/components/delete-user-button';
+import type { User } from '../../../../prisma/generated/client';
 
 import { redirect } from 'next/navigation';
 
@@ -42,7 +43,7 @@ export default async function UsersPage() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                        {users.map((user) => (
+                        {users.map((user: User) => (
                             <tr key={user.id} className="hover:bg-gray-50 transition-colors">
                                 <td className="px-6 py-4 font-medium text-gray-900">
                                     {user.name || 'N/A'}
