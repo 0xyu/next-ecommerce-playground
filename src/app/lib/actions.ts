@@ -1,12 +1,12 @@
 'use server'
 
-import { signIn, signOut } from '@/auth'
+import { signIn, signOut, auth } from '@/auth'
 import { prisma } from '@/lib/db'
-import { auth } from '@/auth'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
+import { AuthError } from 'next-auth'
 
 const ProductSchema = z.object({
     name: z.string().min(1, "Name is required"),
@@ -35,8 +35,15 @@ export async function authenticate(
     try {
         await signIn('credentials', formData)
     } catch (error) {
-        console.error('Auth error:', error);
-        return 'Something went wrong.';
+        if (error instanceof AuthError) {
+            switch (error.type) {
+                case 'CredentialsSignin':
+                    return 'Invalid credentials.';
+                default:
+                    return 'Something went wrong.';
+            }
+        }
+        throw error;
     }
 }
 
@@ -78,6 +85,45 @@ export async function createProduct(prevState: ActionState, formData: FormData):
             return { success: false, message: error.issues[0].message };
         }
         return { success: false, message: 'Failed to create product' };
+    }
+
+    redirect('/products');
+}
+
+export async function updateProduct(id: string, prevState: ActionState, formData: FormData): Promise<ActionState> {
+    const session = await auth();
+    if (!session?.user?.id) {
+        return { success: false, message: 'Unauthorized' };
+    }
+
+    const rawData = {
+        name: formData.get('name'),
+        description: formData.get('description'),
+        price: formData.get('price'),
+        imageUrl: formData.get('imageUrl'),
+        published: formData.get('published'),
+    }
+
+    try {
+        const validatedData = ProductSchema.parse(rawData);
+
+        await prisma.product.update({
+            where: { id, ownerId: session.user.id },
+            data: {
+                name: validatedData.name,
+                description: validatedData.description || '',
+                price: validatedData.price,
+                imageUrl: validatedData.imageUrl || null,
+                published: validatedData.published || false,
+            }
+        });
+
+        revalidatePath('/products');
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            return { success: false, message: error.issues[0].message };
+        }
+        return { success: false, message: 'Failed to update product' };
     }
 
     redirect('/products');

@@ -85,9 +85,12 @@ export default async function ProductsPage() {
                                         {new Date(product.createdAt).toLocaleDateString()}
                                     </td>
                                     <td className="px-6 py-4 text-right">
-                                        <button className="text-gray-400 hover:text-gray-600">
+                                        <Link
+                                            href={`/products/${product.id}/edit`}
+                                            className="text-gray-600 hover:text-black font-medium text-sm transition-colors"
+                                        >
                                             Edit
-                                        </button>
+                                        </Link>
                                     </td>
                                 </tr>
                             ))}
