@@ -33,10 +33,7 @@
   ],
   "exclude": [
     "node_modules",
-    "debug-products.ts",
-    "check-role.ts",
-    "final-check.ts",
-    "publish-teng-product.ts",
-    "update-seller.ts"
+    "scripts",
+    "prisma/generated/**"
   ]
 }
